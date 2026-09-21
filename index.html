@@ -1339,7 +1339,7 @@
             document.getElementById('createModal').style.display = 'block';
         }
 
-        // === BÌNH LUẬN & REPLY ===
+        // === BÌNH LUẬN & REPLY HỆ THỐNG NÂNG CẤP ===
         async function loadComments(charId) {
             const container = document.getElementById('commentsList');
             const { data } = await supabaseClient.from('comments').select('*').eq('character_id', charId).order('created_at', { ascending: true });
@@ -1367,15 +1367,16 @@
                     <p style="font-size:14px; color: var(--text-dark);">${c.content}</p>
                     <div class="comment-actions">
                         <button class="btn-text-action" onclick="toggleCommentLike(this)">❤️ Thích</button>
-                        <button class="btn-text-action" onclick="showReplyForm('${c.id}')">↩ Trả lời</button>
+                        <button class="btn-text-action" onclick="showReplyForm('${c.id}', '${c.id}', '${c.author_name}')">↩ Trả lời</button>
                     </div>
                     <div id="replyForm-${c.id}"></div>
                     <div id="repliesContainer-${c.id}"></div>
                 `;
                 container.appendChild(commentEl);
 
+                // Lấy tất cả các câu trả lời con thuộc bình luận gốc này
                 const childReplies = replies.filter(r => r.parent_id === c.id);
-                const replyContainer = commentEl.querySelector(`#repliesContainer-${c.id}`);
+                const replyContainer = commentEl.querySelector(#repliesContainer-${c.id});
                 childReplies.forEach(r => {
                     const replyEl = document.createElement('div');
                     replyEl.className = 'comment-box comment-reply-box';
@@ -1387,31 +1388,51 @@
                         <p style="font-size:14px; color: var(--text-dark);">${r.content}</p>
                         <div class="comment-actions">
                             <button class="btn-text-action" onclick="toggleCommentLike(this)">❤️ Thích</button>
+                            <!-- Bổ sung nút Trả lời cho Reply B -->
+                            <button class="btn-text-action" onclick="showReplyForm('${r.id}', '${c.id}', '${r.author_name}')">↩ Trả lời</button>
                         </div>
+                        <div id="replyForm-${r.id}"></div>
                     `;
                     replyContainer.appendChild(replyEl);
                 });
             });
         }
 
-        function showReplyForm(commentId) {
-            const formContainer = document.getElementById(`replyForm-${commentId}`);
+        // Hiển thị khung trả lời kèm Tự động Tag tên
+        function showReplyForm(targetId, parentCommentId, mentionName = '') {
+            const formContainer = document.getElementById(replyForm-${targetId});
+            if(!formContainer) return;
+
+            // Bấm lần nữa để đóng/mở ô nhập
+            if(formContainer.innerHTML !== '') {
+                formContainer.innerHTML = '';
+                return;
+            }
+
+            const initialText = mentionName ? @${mentionName}  : '';
+
             formContainer.innerHTML = `
                 <div style="margin-top: 10px; padding: 10px; background: var(--card-pink); border-radius: 8px;">
-                    <input type="text" id="replyAuthor-${commentId}" class="form-control" placeholder="Tên hiển thị..." style="margin-bottom: 6px;">
-                    <textarea id="replyText-${commentId}" class="form-control" placeholder="Viết câu trả lời..."></textarea>
-                    <button class="btn-create-main" style="margin-top: 8px; padding: 6px 14px; font-size: 12px;" onclick="addComment('${commentId}')">Gửi trả lời</button>
+                    <input type="text" id="replyAuthor-${targetId}" class="form-control" placeholder="Tên hiển thị..." style="margin-bottom: 6px;">
+                    <textarea id="replyText-${targetId}" class="form-control" placeholder="Viết câu trả lời...">${initialText}</textarea>
+                    <div style="display:flex; gap:8px; margin-top: 8px;">
+                        <button class="btn-create-main" style="padding: 6px 14px; font-size: 12px;" onclick="addComment('${targetId}', '${parentCommentId}')">Gửi trả lời</button>
+                        <button class="btn-text-action" style="font-size:12px;" onclick="document.getElementById('replyForm-${targetId}').innerHTML=''">Hủy</button>
+                    </div>
                 </div>
             `;
         }
 
-        async function addComment(parentId) {
+        // Gửi bình luận / câu trả lời
+        async function addComment(targetId, parentCommentId = null) {
             if(!currentChar) return;
 
             let author = "", text = "";
-            if (parentId) {
-                author = document.getElementById(`replyAuthor-${parentId}`).value;
-                text = document.getElementById(`replyText-${parentId}`).value;
+            const isReply = targetId !== null;
+
+            if (isReply) {
+                author = document.getElementById(replyAuthor-${targetId}).value;
+                text = document.getElementById(replyText-${targetId}).value;
             } else {
                 author = document.getElementById('commentAuthorInput').value;
                 text = document.getElementById('commentTextInput').value;
@@ -1422,16 +1443,18 @@
                 return;
             }
 
+            const finalParentId = parentCommentId || targetId;
+
             await supabaseClient.from('comments').insert([{
                 character_id: currentChar.id,
-                parent_id: parentId,
+                parent_id: finalParentId,
                 author_name: author,
                 content: text
             }]);
 
             showToast("Đăng bình luận thành công!", "success");
 
-            if(!parentId) {
+            if(!isReply) {
                 document.getElementById('commentAuthorInput').value = "";
                 document.getElementById('commentTextInput').value = "";
             }
