@@ -24,7 +24,6 @@
     <!-- Nhúng Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    
     <style>
         :root {
             --bg-main: #fff5f7;
@@ -133,7 +132,6 @@
             box-shadow: 0 0 0 4px rgba(255, 143, 163, 0.2);
         }
 
-        /* NÚT TẠO CHARACTER NỔI BẬT */
         .btn-create-main {
             background: linear-gradient(135deg, #ff8fa3, #ff4d6d);
             color: white;
@@ -240,7 +238,6 @@
             line-height: 1.4;
         }
 
-        /* HASHTAG CHIPS (ĐÃ SỬA KHÔNG BỊ BẮT VÀ KHÔNG TẠO KHOẢNG TRẮNG) */
         .hashtag-container {
             display: flex;
             flex-wrap: wrap;
@@ -261,7 +258,6 @@
             gap: 4px;
         }
 
-        /* CARD STATS BAR (CĂN ĐỀU 5 MỤC CHỈ SỐ & HÀNH ĐỘNG) */
         .card-stats-bar {
             display: flex;
             justify-content: space-between;
@@ -352,7 +348,6 @@
             padding: 30px 20px 80px 20px;
         }
 
-        /* FORM STYLES */
         .form-group {
             margin-bottom: 20px;
         }
@@ -385,7 +380,6 @@
             min-height: 90px;
         }
 
-        /* UPLOAD ANH PREVIEW */
         .img-preview-box {
             width: 140px;
             height: 140px;
@@ -407,7 +401,6 @@
             object-fit: cover;
         }
 
-        /* HASHTAG INPUT BUILDER */
         .hashtag-builder {
             display: flex;
             gap: 8px;
@@ -453,7 +446,6 @@
             font-weight: bold;
         }
 
-        /* NÚT ĐĂNG TẢI NỔI BẬT */
         .btn-submit-large {
             width: 100%;
             background: linear-gradient(135deg, #ff8fa3, #ff4d6d);
@@ -474,7 +466,6 @@
             box-shadow: 0 8px 25px rgba(255, 77, 109, 0.45);
         }
 
-        /* --- XEM CHI TIẾT CARD CARDS --- */
         .detail-card {
             background-color: var(--card-pink);
             border: 1px solid var(--border-pink);
@@ -528,7 +519,6 @@
             white-space: pre-line;
         }
 
-        /* HÀNG NÚT HÀNH ĐỘNG CHI TIẾT */
         .detail-action-bar {
             display: flex;
             align-items: center;
@@ -588,7 +578,6 @@
             box-shadow: 0 8px 25px rgba(255, 77, 109, 0.5);
         }
 
-        /* KEY MENU DROPDOWN */
         .key-menu-wrapper {
             position: relative;
         }
@@ -621,7 +610,6 @@
             background: var(--card-pink);
         }
 
-        /* BÌNH LUẬN */
         .comment-box {
             background: white;
             border: 1px solid var(--border-pink);
@@ -769,9 +757,7 @@
                         <input type="text" id="hashtagInput" class="form-control" placeholder="Ví dụ: Xuyên không, Học đường...">
                         <button type="button" class="btn-add-tag" onclick="addHashtag()">Thêm</button>
                     </div>
-                    <div class="hashtag-chips-wrapper" id="hashtagChipsWrapper">
-                        <!-- Các ô Hashtag sẽ render ở đây -->
-                    </div>
+                    <div class="hashtag-chips-wrapper" id="hashtagChipsWrapper"></div>
                 </div>
 
                 <div class="form-group">
@@ -804,7 +790,6 @@
         <div class="modal-header-bar">
             <button class="close-fullscreen-btn" onclick="closeDetailModal()">&times;</button>
             
-            <!-- Nút Chìa khóa Góc Phải -->
             <div class="key-menu-wrapper">
                 <button class="btn-icon-only" onclick="toggleKeyMenu(event)" style="font-size: 20px;">🔑</button>
                 <div class="key-menu-dropdown" id="keyMenuDropdown">
@@ -815,7 +800,6 @@
         </div>
 
         <div class="fullscreen-body">
-            <!-- Card 1: Avatar, Tên, Chỉ số -->
             <div class="detail-card">
                 <img id="detail-avatar" class="detail-avatar-large" src="" alt="Avatar">
                 <h2 id="detail-name" class="detail-char-name"></h2>
@@ -840,7 +824,6 @@
                 </div>
             </div>
 
-            <!-- Card 2: Creator & Note -->
             <div class="detail-card">
                 <div class="detail-section-title">CREATOR</div>
                 <div class="detail-section-content" id="detail-author" style="font-weight: 700;"></div>
@@ -850,60 +833,49 @@
                 </div>
             </div>
 
-            <!-- Card 3: Hashtags -->
             <div class="detail-card">
                 <div class="detail-section-title">HASHTAGS</div>
                 <div class="hashtag-container" id="detail-hashtags" style="margin-top: 8px;"></div>
             </div>
 
-            <!-- Card 4: Giới thiệu -->
             <div class="detail-card" id="detail-intro-wrapper">
                 <div class="detail-section-title">GIỚI THIỆU</div>
                 <div class="detail-section-content" id="detail-intro"></div>
             </div>
 
-            <!-- Card 5: Plot -->
             <div class="detail-card">
                 <div class="detail-section-title">CỐT TRUYỆN (PLOT)</div>
                 <div class="detail-section-content" id="detail-plot"></div>
             </div>
 
-            <!-- Card 6: Đoạn mở đầu -->
             <div class="detail-card" id="detail-opening-wrapper">
                 <div class="detail-section-title">ĐOẠN MỞ ĐẦU</div>
                 <div class="detail-section-content" id="detail-opening"></div>
             </div>
 
-            <!-- Card 7: Thanh nút Hành Động -->
             <div class="detail-action-bar">
-                <!-- Nút Thích (Trái tim Icon) -->
                 <button class="btn-action-circle" id="btnDetailLike" onclick="toggleLike()">
                     <svg class="icon-svg" style="width:24px; height:24px; stroke: var(--grey-icon); fill: none; stroke-width: 2;" viewBox="0 0 24 24">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                     </svg>
                 </button>
 
-                <!-- Nút Open Character Nổi Bật -->
                 <button class="btn-open-char-large" onclick="openCharacterLink()">Open Character</button>
 
-                <!-- Nút Chia sẻ (Icon) -->
                 <button class="btn-action-circle" onclick="shareCharacter()">
                     <svg class="icon-svg" style="width:22px; height:22px;" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l6.96-4.11c.52.48 1.2.78 1.96.78 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.33 6.82 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.82 0 1.5-.33 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
                 </button>
             </div>
 
-            <!-- Card 8: Khung Bình Luận -->
             <div class="detail-card" style="background: white;">
                 <div class="detail-section-title" style="margin-bottom: 15px;">BÌNH LUẬN</div>
                 
-                <!-- Form nhập bình luận -->
                 <div style="margin-bottom: 20px;">
                     <input type="text" id="commentAuthorInput" class="form-control" placeholder="Tên hiển thị..." style="margin-bottom: 8px;">
                     <textarea id="commentTextInput" class="form-control" placeholder="Viết bình luận..."></textarea>
                     <button class="btn-create-main" style="margin-top: 10px; padding: 10px 20px; font-size: 14px;" onclick="addComment(null)">Gửi bình luận</button>
                 </div>
 
-                <!-- Danh sách bình luận -->
                 <div id="commentsList"></div>
             </div>
         </div>
@@ -921,7 +893,6 @@
         let hashtagList = [];
         let selectedFile = null;
 
-        // THÔNG BÁO TOAST HỒNG
         function showToast(message, type = 'error') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -934,7 +905,6 @@
         document.addEventListener("DOMContentLoaded", async () => {
             await loadCharacters();
 
-            // Link chia sẻ trực tiếp (?id=xxx)
             const urlParams = new URLSearchParams(window.location.search);
             const charId = urlParams.get('id');
             if (charId) {
@@ -942,7 +912,6 @@
                 if (data) showDetail(data);
             }
 
-            // Đóng Dropdown khi click ra ngoài
             window.onclick = function(e) {
                 if (!e.target.matches('.key-menu-wrapper *')) {
                     document.getElementById('keyMenuDropdown').style.display = 'none';
@@ -950,7 +919,6 @@
             };
         });
 
-        // TẢI DANH SÁCH NHÂN VẬT & TÍNH TỔNG BÌNH LUẬN
         async function loadCharacters() {
             const grid = document.getElementById('character-grid');
             const { data: chars, error } = await supabaseClient.from('characters').select('*').order('created_at', { ascending: false });
@@ -960,7 +928,6 @@
                 return;
             }
 
-            // Lấy thêm số lượng bình luận cho từng nhân vật
             const { data: comments } = await supabaseClient.from('comments').select('character_id');
             const commentCounts = {};
             if(comments) {
@@ -977,7 +944,6 @@
             renderCharacterCards(allCharacters);
         }
 
-        // RENDER DẠNG CARD CÂN ĐỐI VỚI ĐỦ 5 MỤC CHỈ SỐ
         function renderCharacterCards(list) {
             const grid = document.getElementById('character-grid');
             grid.innerHTML = '';
@@ -1006,27 +972,22 @@
                         </div>
                     </div>
                     <div class="card-stats-bar">
-                        <!-- 1. Lượt xem -->
                         <div class="stat-item" title="Tổng lượt xem">
                             <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
                             <span>${char.views || 0}</span>
                         </div>
-                        <!-- 2. Lượt thích -->
                         <div class="stat-item" title="Tổng lượt thích">
                             <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                             <span>${char.likes || 0}</span>
                         </div>
-                        <!-- 3. Lượt bình luận -->
                         <div class="stat-item" title="Tổng lượt bình luận">
                             <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
                             <span>${char.comments_count || 0}</span>
                         </div>
-                        <!-- 4. Lượt chia sẻ -->
                         <div class="stat-item" title="Tổng lượt chia sẻ">
                             <svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l6.96-4.11c.52.48 1.2.78 1.96.78 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.33 6.82 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.82 0 1.5-.33 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
                             <span>${char.shares || 0}</span>
                         </div>
-                        <!-- 5. Nút chia sẻ trực tiếp -->
                         <button class="btn-icon-only" title="Chia sẻ link" onclick="event.stopPropagation(); shareDirect('${char.id}')">
                             <svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l6.96-4.11c.52.48 1.2.78 1.96.78 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.33 6.82 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.82 0 1.5-.33 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
                         </button>
@@ -1036,7 +997,6 @@
             });
         }
 
-        // TÌM KIẾM THEO NAME HOẶC HASHTAG
         function handleSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
             const filtered = allCharacters.filter(c => 
@@ -1046,7 +1006,6 @@
             renderCharacterCards(filtered);
         }
 
-        // XỬ LÝ QUẢN LÝ HASHTAG DẠNG Ô
         function addHashtag() {
             const input = document.getElementById('hashtagInput');
             let val = input.value.trim();
@@ -1074,7 +1033,6 @@
             `).join('');
         }
 
-        // XEM TRƯỚC ẢNH UPLOAD
         function previewImage(event) {
             const file = event.target.files[0];
             if(file) {
@@ -1090,7 +1048,6 @@
             }
         }
 
-        // MỞ/ĐÓNG MODAL TẠO TRANG
         function openCreateModal() {
             document.getElementById('formTitle').innerText = "Tạo Nhân Vật Mới";
             document.getElementById('characterForm').reset();
@@ -1107,7 +1064,6 @@
             document.getElementById('createModal').style.display = 'none';
         }
 
-        // ĐĂNG TẢI HOẶC CẬP NHẬT NHÂN VẬT
         async function submitCharacter(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -1172,11 +1128,9 @@
             }
         }
 
-        // XEM CHI TIẾT NHÂN VẬT
         async function showDetail(char) {
             currentChar = char;
 
-            // Tăng Lượt Xem Ngầm
             char.views = (char.views || 0) + 1;
             await supabaseClient.from('characters').update({ views: char.views }).eq('id', char.id);
 
@@ -1187,7 +1141,6 @@
             document.getElementById('detail-shares').innerText = char.shares || 0;
             document.getElementById('detail-author').innerText = char.author;
 
-            // Hasthag ô riêng
             const tagContainer = document.getElementById('detail-hashtags');
             const tagsArr = char.hashtags ? char.hashtags.split(',').filter(t => t.trim()) : [];
             tagContainer.innerHTML = tagsArr.map(t => `<span class="tag-chip" style="font-size:13px; padding: 6px 14px;">${t.trim()}</span>`).join('');
@@ -1206,7 +1159,6 @@
             handleOptional('detail-opening', 'detail-opening-wrapper', char.opening);
             document.getElementById('detail-plot').innerText = char.plot;
 
-            // Trạng thái nút Thích
             const isLiked = localStorage.getItem(`liked_${char.id}`) === 'true';
             const likeBtn = document.getElementById('btnDetailLike');
             if(isLiked) likeBtn.classList.add('liked');
@@ -1220,14 +1172,12 @@
             document.getElementById('detailModal').style.display = 'none';
         }
 
-        // BẬT/TẮT ĐỔ MENU CHÌA KHÓA GÓC PHẢI
         function toggleKeyMenu(e) {
             e.stopPropagation();
             const dropdown = document.getElementById('keyMenuDropdown');
             dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
         }
 
-        // CHỨC NĂNG THÍCH / BỎ THÍCH
         async function toggleLike() {
             if(!currentChar) return;
             const key = `liked_${currentChar.id}`;
@@ -1251,7 +1201,6 @@
             loadCharacters();
         }
 
-        // CHIA SẺ LINK & TĂNG TỔNG LƯỢT CHIA SẺ
         function shareCharacter() {
             if(!currentChar) return;
             shareDirect(currentChar.id);
@@ -1262,7 +1211,6 @@
             navigator.clipboard.writeText(shareUrl);
             showToast("Đã sao chép link nhân vật vào bộ nhớ tạm!", "success");
 
-            // Tăng lượt chia sẻ ngầm
             const char = allCharacters.find(c => c.id === id);
             if(char) {
                 char.shares = (char.shares || 0) + 1;
@@ -1278,7 +1226,6 @@
             if(currentChar && currentChar.link) window.open(currentChar.link, '_blank');
         }
 
-        // XÓA NHÂN VẬT (CÓ PASSKEY)
         async function handleDelete() {
             document.getElementById('keyMenuDropdown').style.display = 'none';
             if(!currentChar) return;
@@ -1301,7 +1248,6 @@
             }
         }
 
-        // SỬA NHÂN VẬT (CÓ PASSKEY)
         function openEditModal() {
             document.getElementById('keyMenuDropdown').style.display = 'none';
             if(!currentChar) return;
@@ -1325,13 +1271,11 @@
             document.getElementById('charOpening').value = currentChar.opening || "";
             document.getElementById('charLink').value = currentChar.link;
 
-            // Ảnh cũ
             const imgPreview = document.getElementById('avatarPreviewImg');
             imgPreview.src = currentChar.avatar_url;
             imgPreview.style.display = 'block';
             document.getElementById('avatarPreviewPlaceholder').style.display = 'none';
 
-            // Hashtag cũ
             hashtagList = currentChar.hashtags ? currentChar.hashtags.split(',').map(t => t.trim()) : [];
             renderHashtagChips();
 
@@ -1339,7 +1283,7 @@
             document.getElementById('createModal').style.display = 'block';
         }
 
-        // === BÌNH LUẬN & REPLY (ĐÃ SỬA LỖI CÚ PHÁP) ===
+        // === BÌNH LUẬN & REPLY ===
         async function loadComments(charId) {
             const container = document.getElementById('commentsList');
             const { data } = await supabaseClient.from('comments').select('*').eq('character_id', charId).order('created_at', { ascending: true });
@@ -1375,7 +1319,6 @@
                 `;
                 container.appendChild(commentEl);
 
-                // Lấy tất cả các câu trả lời con thuộc bình luận gốc này
                 const childReplies = replies.filter(r => r.parent_id === c.id);
                 const replyContainer = document.getElementById('repliesContainer-' + c.id);
                 if (replyContainer) {
@@ -1400,7 +1343,6 @@
             });
         }
 
-        // Hiển thị khung trả lời kèm Tự động Tag tên
         function showReplyForm(targetId, parentCommentId, mentionName) {
             mentionName = mentionName || '';
             const formContainer = document.getElementById('replyForm-' + targetId);
@@ -1425,7 +1367,6 @@
             `;
         }
 
-        // Gửi bình luận / câu trả lời
         async function addComment(targetId, parentCommentId) {
             if(!currentChar) return;
 
