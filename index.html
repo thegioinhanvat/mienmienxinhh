@@ -1339,13 +1339,14 @@
             document.getElementById('createModal').style.display = 'block';
         }
 
-        // === BÌNH LUẬN & REPLY HỆ THỐNG NÂNG CẤP ===
+        // === BÌNH LUẬN & REPLY (ĐÃ SỬA LỖI CÚ PHÁP) ===
         async function loadComments(charId) {
             const container = document.getElementById('commentsList');
             const { data } = await supabaseClient.from('comments').select('*').eq('character_id', charId).order('created_at', { ascending: true });
 
             const count = data ? data.length : 0;
-            document.getElementById('detail-comments-count').innerText = count;
+            const countEl = document.getElementById('detail-comments-count');
+            if (countEl) countEl.innerText = count;
 
             if(!data || data.length === 0) {
                 container.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Chưa có bình luận nào. Hãy là người đầu tiên!</p>';
@@ -1376,40 +1377,41 @@
 
                 // Lấy tất cả các câu trả lời con thuộc bình luận gốc này
                 const childReplies = replies.filter(r => r.parent_id === c.id);
-                const replyContainer = commentEl.querySelector(#repliesContainer-${c.id});
-                childReplies.forEach(r => {
-                    const replyEl = document.createElement('div');
-                    replyEl.className = 'comment-box comment-reply-box';
-                    replyEl.innerHTML = `
-                        <div class="comment-header">
-                            <span class="comment-author">${r.author_name}</span>
-                            <span class="comment-time">${new Date(r.created_at).toLocaleDateString('vi-VN')}</span>
-                        </div>
-                        <p style="font-size:14px; color: var(--text-dark);">${r.content}</p>
-                        <div class="comment-actions">
-                            <button class="btn-text-action" onclick="toggleCommentLike(this)">❤️ Thích</button>
-                            <!-- Bổ sung nút Trả lời cho Reply B -->
-                            <button class="btn-text-action" onclick="showReplyForm('${r.id}', '${c.id}', '${r.author_name}')">↩ Trả lời</button>
-                        </div>
-                        <div id="replyForm-${r.id}"></div>
-                    `;
-                    replyContainer.appendChild(replyEl);
-                });
+                const replyContainer = document.getElementById('repliesContainer-' + c.id);
+                if (replyContainer) {
+                    childReplies.forEach(r => {
+                        const replyEl = document.createElement('div');
+                        replyEl.className = 'comment-box comment-reply-box';
+                        replyEl.innerHTML = `
+                            <div class="comment-header">
+                                <span class="comment-author">${r.author_name}</span>
+                                <span class="comment-time">${new Date(r.created_at).toLocaleDateString('vi-VN')}</span>
+                            </div>
+                            <p style="font-size:14px; color: var(--text-dark);">${r.content}</p>
+                            <div class="comment-actions">
+                                <button class="btn-text-action" onclick="toggleCommentLike(this)">❤️ Thích</button>
+                                <button class="btn-text-action" onclick="showReplyForm('${r.id}', '${c.id}', '${r.author_name}')">↩ Trả lời</button>
+                            </div>
+                            <div id="replyForm-${r.id}"></div>
+                        `;
+                        replyContainer.appendChild(replyEl);
+                    });
+                }
             });
         }
 
         // Hiển thị khung trả lời kèm Tự động Tag tên
-        function showReplyForm(targetId, parentCommentId, mentionName = '') {
-            const formContainer = document.getElementById(replyForm-${targetId});
+        function showReplyForm(targetId, parentCommentId, mentionName) {
+            mentionName = mentionName || '';
+            const formContainer = document.getElementById('replyForm-' + targetId);
             if(!formContainer) return;
 
-            // Bấm lần nữa để đóng/mở ô nhập
             if(formContainer.innerHTML !== '') {
                 formContainer.innerHTML = '';
                 return;
             }
 
-            const initialText = mentionName ? @${mentionName}  : '';
+            const initialText = mentionName ? '@' + mentionName + ' ' : '';
 
             formContainer.innerHTML = `
                 <div style="margin-top: 10px; padding: 10px; background: var(--card-pink); border-radius: 8px;">
@@ -1424,15 +1426,17 @@
         }
 
         // Gửi bình luận / câu trả lời
-        async function addComment(targetId, parentCommentId = null) {
+        async function addComment(targetId, parentCommentId) {
             if(!currentChar) return;
 
             let author = "", text = "";
-            const isReply = targetId !== null;
+            const isReply = targetId !== null && targetId !== undefined;
 
             if (isReply) {
-                author = document.getElementById(replyAuthor-${targetId}).value;
-                text = document.getElementById(replyText-${targetId}).value;
+                const authorEl = document.getElementById('replyAuthor-' + targetId);
+                const textEl = document.getElementById('replyText-' + targetId);
+                if (authorEl) author = authorEl.value;
+                if (textEl) text = textEl.value;
             } else {
                 author = document.getElementById('commentAuthorInput').value;
                 text = document.getElementById('commentTextInput').value;
@@ -1460,7 +1464,7 @@
             }
 
             loadComments(currentChar.id);
-            loadCharacters(); // Cập nhật lại số lượng bình luận ở trang chủ
+            loadCharacters();
         }
 
         function toggleCommentLike(btn) {
